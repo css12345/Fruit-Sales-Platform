@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fruitsalesplatform.mapper.AccessoryMapper">
+	<resultMap type="accessory" id="accessoryRM">
+		<id column="accessoryid" property="accessoryId" jdbcType="VARCHAR"/>
+		<result column="fruitid" property="fruitId" jdbcType="VARCHAR"/>
+		<result column="price" property="price" jdbcType="DOUBLE"/>
+		<result column="createtime" property="createTime"/>
+	</resultMap>
+	
+	<select id="get" resultMap="accessoryRM">
+		select * from accessory where accessoryid=#{accessoryid}
+	</select>
+	
+	<select id="find" parameterType="hashmap" resultMap="accessoryRM">
+		select * from accessory
+		where 1=1
+		<if test="test=fruitId != null">and fruitid = #{fruitId}</if>
+	</select>
+	
+	<insert id="insert" parameterType="accessory">
+		insert into
+		accessory(accessoryid,fruitid,name,price,createtime)
+		values
+		(
+		#{accessoryId,jdbcType=VARCHAR},
+		#{fruitId,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		#{price,jdbcType=DOUBLE},
+		DATE_FORMAT(#{createTime},'%Y-%m-%d %H:%i:%s')
+		)
+	</insert>
+	
+	<update id="update" parameterType="accessory">
+		update accessory
+		<set>
+			<if test="name != null">name=#{name,jdbcType=VARCHAR},</if>
+			<if test="price != null">price=#{price,jdbcType=DOUBLE},</if>
+		</set>
+		where accessoryid=#{accessoryId}
+	</update>
+	
+	<delete id="deleteById" parameterType="string">
+		delete from accessory
+		where accessoryid=#{accessoryId}
+	</delete>
+	
+	<delete id="deleteByFruitId" parameterType="string">
+		delete from accessory
+		where fruitid=#{fruitId}
+	</delete>
+	
+	<delete id="delete" parameterType="string">
+		delete from accessory
+		where accessoryid in
+		<foreach collection="array" item="accessoryId" open="(" close=")" separator=",">
+			#{accessoryId}
+		</foreach>
+	</delete>
+</mapper>

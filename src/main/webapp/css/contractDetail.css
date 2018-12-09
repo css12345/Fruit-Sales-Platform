@@ -1,0 +1,22 @@
+@CHARSET "UTF-8";
+h2 {
+	text-align:center;
+}
+
+.createTime {
+	float:right;
+	font-size:10px;
+}
+
+.barCode {
+	color:blue;
+}
+
+.info {
+	border: 1px solid #CCC;
+}
+
+.commoditiesInformation {
+	width: 510px;
+	text-align: center;
+}

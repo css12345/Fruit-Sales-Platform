@@ -1,0 +1,83 @@
+@CHARSET "UTF-8";
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+#menuContent a {
+	text-decoration: none;
+	color: #ffffff
+}
+
+.c {
+	border-style: solid;
+	width: 200px;
+	height: 130px;
+	margin: 4 23 0 23;
+	border-radius: 5;
+	display: block;
+	background: #fff;
+	margin: 10% auto;
+}
+
+.mask {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	background: rgba(0, 0, 0, .3);
+	display: none;
+}
+
+.addMask {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	background: rgba(0, 0, 0, .3);
+	display: none;
+}
+
+button, input[type="submit"] {
+	background-color: #173e65;
+	color: #ffffff;
+	width: 70px;
+}
+
+.width1 {
+	width: 120px;
+}
+
+.width2 {
+	width: 50px;
+}
+
+.top {
+	margin-top: 10px;
+}
+
+table {
+	margin-top: 10px;
+	width: 700px;
+	text-align: center;
+}
+
+.change {
+	background-color: #173e65;
+	height: 20px;
+	color: #fff;
+	font-size: 12px;
+	padding-left: 7px;
+}
+
+.font1 {
+	float: right;
+	padding-right: 10px;
+}
+
+.addAccessoryMask{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	background: rgba(0,0,0,.3);
+	display: none;
+}

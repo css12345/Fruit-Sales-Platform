@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fruitsalesplatform.mapper.CommoditiesMapper">
+	<resultMap type="commodities" id="commoditiesRM">
+		<id property="fruitId" column="fruitid" jdbcType="VARCHAR" />
+		<result property="price" column="price" jdbcType="DOUBLE" />
+		<result property="createTime" column="createtime"/>
+	</resultMap>
+	
+	<select id="get" resultMap="commoditiesRM">
+		select * from commodities where fruitid=#{fruitid}
+	</select>
+	
+	<sql id="query_commodities_where">
+		<if test="name != null"> and name like #{name}</if>
+		<if test="startPrice != null">
+			<![CDATA[ and price >= #{startPrice}]]>
+		</if>
+		<if test="endPrice != null">
+			<![CDATA[ and price <= #{endPrice}]]>
+		</if>
+		<if test="locality != null"> and locality like #{locality}</if>
+		<if test="createTime != null"> and createtime like DATE_FORMAT(#{createTime},'%Y-%m-%d %H:%i:%s')</if>
+		<if test="startTime != null">
+			<![CDATA[ and createtime >= DATE_FORMAT(#{startTime},'%Y-%m-%d %H:%i:%s')]]>
+		</if>
+		<if test="endTime != null">
+			<![CDATA[ and createtime <= DATE_FORMAT(#{endTime},'%Y-%m-%d %H:%i:%s')]]>
+		</if>
+	</sql>
+	
+	<select id="find" parameterType="hashmap" resultMap="commoditiesRM">
+		select * from commodities
+		where 1=1
+		<include refid="query_commodities_where" />
+		<if test="startPage != null and pageSize != null">LIMIT #{startPage},#{pageSize}</if>
+	</select>
+	
+	<select id="count" parameterType="hashmap" resultType="int">
+		select count(*) from commodities
+		where 1=1
+		<include refid="query_commodities_where" />
+	</select>
+	
+	<insert id="insert" parameterType="commodities">
+		insert into
+		commodities(fruitid,name,price,locality,createtime)
+		values
+		(
+		#{fruitId,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		#{price,jdbcType=DOUBLE},
+		#{locality,jdbcType=VARCHAR},
+		DATE_FORMAT(#{createTime},'%Y-%m-%d %H:%i:%s')
+		)
+	</insert>
+	
+	<update id="update" parameterType="commodities">
+		update commodities
+		<set>
+			<if test="name != null">name=#{name,jdbcType=VARCHAR},</if>
+			<if test="price != null">price=#{price,jdbcType=DOUBLE},</if>
+			<if test="locality != null">locality=#{locality,jdbcType=VARCHAR},</if>
+			<if test="createTime != null">createtime=DATE_FORMAT(#{createTime},'%Y-%m-%d %H:%i:%s')</if>
+		</set>
+		where fruitid=#{fruitId}
+	</update>
+	
+	<delete id="deleteById" parameterType="string">
+		delete from commodities
+		where fruitid=#{fruitId}
+	</delete>
+	
+	<delete id="delete" parameterType="string">
+		delete from commodities
+		where fruitid in
+		<foreach collection="array" item="fruitId" open="(" close=")" separator=",">
+			#{fruitId}
+		</foreach>
+	</delete>
+</mapper>

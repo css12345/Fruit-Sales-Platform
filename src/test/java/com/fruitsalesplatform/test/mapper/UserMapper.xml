@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="test">
+	<select id="findUserByName" parameterType="java.lang.String" resultType="com.fruitsalesplatform.test.entity.User">
+		select * from user where name like #{name};
+	</select>
+	
+	<resultMap type="user" id="userRM">
+		<id property="userId" column="userid" jdbcType="VARCHAR" />
+		<result property="userName" column="username" />
+	</resultMap>
+
+	<select id="get" parameterType="string" resultMap="userRM">
+		select *
+		from user where userid=${userid}
+	</select>
+
+	<select id="find" parameterType="map" resultMap="userRM">
+		select * from user
+		<where>
+			<if test="username != null">and username=#{username}</if>
+			<if test="password != null">and password=#{password}</if>
+			<if test="name != null">and name=#{name}</if>
+			<if test="telephone != null">and telephone=#{telephone}</if>
+		</where>
+	</select>
+
+	<insert id="insert" parameterType="user">
+		insert into
+		user(userid,username,password,name,telephone)
+		values
+		(
+		#{userId,jdbcType=VARCHAR},
+		#{userName,jdbcType=VARCHAR},
+		#{password,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		#{telephone,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="update" parameterType="user">
+		update user
+		<set>
+			<if test="userName != null">username=#{userName,jdbcType=VARCHAR},</if>
+			<if test="password != null">password=#{password,jdbcType=VARCHAR},</if>
+			<if test="name != null">name=#{name,jdbcType=VARCHAR},</if>
+			<if test="telephone != null">telephone=#{telephone,jdbcType=VARCHAR}</if>
+		</set>
+		where userid=#{userId}
+	</update>
+	
+	<delete id="deleteById" parameterType="string">
+		delete from user where userid=#{userId}
+	</delete>
+	
+	<delete id="delete" parameterType="string">
+		delete from user
+		where userid in
+		<foreach collection="array" item="userId" open="(" close=")" separator=",">
+			#{userId}
+		</foreach>
+	</delete>
+</mapper>

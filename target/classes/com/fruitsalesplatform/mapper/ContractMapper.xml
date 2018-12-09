@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fruitsalesplatform.mapper.ContractMapper">
+	<resultMap type="contractVo" id="contractVoRM">
+		<id property="contractId" column="contractid" jdbcType="VARCHAR"/>
+		<result property="barCode" column="barcode" jdbcType="VARCHAR"/>
+		<result property="retailerName" column="retailer_name" jdbcType="VARCHAR"/>
+		<result property="createTime" column="createtime"/>
+	</resultMap>
+	
+	<sql id="query_contract_where">
+		<if test="barCode != null">and t.barcode like #{barCode}</if>
+		<if test="type != null">and t.type like #{type}</if>
+		<if test="retailerName != null">and r.name like #{retailerName}</if>
+		<if test="startTime != null">
+			<![CDATA[ and t.createtime >= DATE_FORMAT(#{startTime},'%Y-%m-%d %H:%i:%s')]]>
+		</if>
+		<if test="endTime != null">
+			<![CDATA[and t.createtime <= DATE_FORMAT(#{endTime},'%Y-%m-%d %H:%i:%s')]]>
+		</if>
+	</sql>
+	
+	<select id="findContractList" parameterType="hashmap" resultMap="contractVoRM">
+		select t.contractid,t.barcode,t.`type`,t.createtime,r.name as retailer_name
+		from contract t left join retailer r on t.retailerid = r.retailerid
+		where 1=1
+		<include refid="query_contract_where" />
+		<if test="startPage != null and pageSize != null">LIMIT #{startPage},#{pageSize}</if>
+	</select>
+	
+	<select id="count" parameterType="hashmap" resultType="int">
+		select count(*) from contract t left join retailer r on t.retailerid = r.retailerid
+		where 1=1
+		<include refid="query_contract_where" />
+	</select>
+	
+	<select id="get" parameterType="string" resultMap="contractRM">
+		select t.`*`,r.retailerid,r.name as retailer_name,r.telephone,r.address,mdl.*
+		from(
+		select c.fruitid,c.name as fruit_name,c.price,c.locality,m.number,a.name as accessory_name,a.price as accessory_price
+		from middle_tab m left join commodities c on m.fruitid = c.fruitid
+		left join accessory a on a.fruitid = c.fruitid
+		where m.contractid = #{contractId}
+		) mdl,contract t left join retailer r on t.retailerid = r.retailerid
+		where t.contractid = #{contractId}
+	</select>
+	
+	<resultMap type="contract" id="contractRM">
+		<id column="contractid" property="contractId"/>
+		<result column="barcode" property="barCode"/>
+		<result column="createtime" property="createTime"/>
+		<result column="type" property="type" jdbcType="INTEGER"/>
+		<association property="retailer" javaType="retailer">
+			<id column="retailerid" property="retailerId"/>
+			<result column="retailer_name" property="name"/>
+			<result column="telephone" property="telephone"/>
+			<result column="address" property="address"/>
+		</association>
+		<collection property="commoditiesList" ofType="commoditiesVo">
+			<id column="fruitid" property="fruitId"/>
+			<result column="fruit_name" property="name"/>
+			<result column="price" property="price"/>
+			<result column="locality" property="locality"/>
+			<result column="number" property="number"/>
+			<collection property="accessoryList" ofType="accessory">
+				<result column="accessory_name" property="name"/>
+				<result column="accessory_price" property="price"/>
+			</collection>
+		</collection>
+	</resultMap>
+	
+	<insert id="insert" parameterType="contract">
+		insert into contract
+		(contractid,retailerid,barcode,type,createtime)
+		values
+		(	#{contractId},
+			#{retailer.retailerId},
+			#{barCode},
+			#{type},
+			DATE_FORMAT(#{createTime},'%Y-%m-%d %H:%i:%s')
+		)
+	</insert>
+	
+	<insert id="insertMiddleTab" parameterType="middleTab">
+		insert into middle_tab
+		(middleid,contractid,fruitid,number)
+		values 
+		(#{middleId},#{contractId},#{fruitId},#{number})
+	</insert>
+	
+	<update id="update" parameterType="contract">
+		update contract
+		<set>
+			<if test="retailer.retailerId != null">retailerid = #{retailer.retailerId},</if>
+			<if test="type != null">type=#{type}</if>
+		</set>
+		where contractid = #{contractId}
+	</update>
+	
+	<delete id="deleteMiddleTab" parameterType="string">
+		delete from middle_tab
+		where contractid = #{contractId}
+	</delete>
+	
+	<delete id="deleteById" parameterType="string">
+		delete from contract
+		where contractid = #{contractId}
+	</delete>
+	
+	<select id="getMaxBarCode" resultType="string">
+		select MAX(barcode) from contract
+	</select>
+</mapper>
