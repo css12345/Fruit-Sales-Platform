@@ -39,11 +39,25 @@
 	function deleteCommodities(id,name) {
 		var con = confirm("你确认删除商品" + name + "吗？");
 		if(con) {
-			$("#dFruitId").val(id);
-			$("#dStartPage").val($("#startPage").val());
-			$("#dCurrentPage").val($("#currentPage").val());
-			$("#dPageSize").val($("#pageSize").val());
-			$("#deleteForm").submit();
+			var message = "{'fruitId':'" + id + "'}";
+			$.ajax({
+				type : 'post',
+				url : '/Fruit-Sales-Platform/contract/getCommodityAllContract.action',
+				contentType : 'application/json;charset=utf-8',
+				data : message,
+				success : function(data) {
+					if(data == "") {
+						$("#dFruitId").val(id);
+						$("#dStartPage").val($("#startPage").val());
+						$("#dCurrentPage").val($("#currentPage").val());
+						$("#dPageSize").val($("#pageSize").val());
+						$("#deleteForm").submit();
+					}
+					else {
+						alert("商品" + name + "还在订单中，请先删除订单！");
+					}
+				}
+			});
 		}
 	}
 	

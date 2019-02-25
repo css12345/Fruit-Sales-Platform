@@ -14,7 +14,7 @@
 			<a href="${pageContext.request.contextPath }/commodities/list.action">货物管理</a>| 
 			<a href="${pageContext.request.contextPath }/retailer/list.action?status=-1">零售商管理</a>|
 			<a href="${pageContext.request.contextPath }/contract/list.action?type=-1">购销合同</a>| 
-			<a>用户设置</a>
+			<a href="${pageContext.request.contextPath }/user/setting.action">用户设置</a>
 			<a href="${pageContext.request.contextPath }/user/logout.action" style="float: right;margin-right: 10px;">
 				退出
 			</a>

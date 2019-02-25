@@ -14,4 +14,6 @@ public interface ContractDao extends BaseDao<Contract> {
 	public void insertMiddleTab(MiddleTab middleTab);
 	public int deleteMiddleTab(Serializable contractId);
 	public String getMaxBarCode();
+	public List<String> getRetailerAllContract(String retailerId);
+	public List<String> getCommodityAllContract(String fruitId);
 }

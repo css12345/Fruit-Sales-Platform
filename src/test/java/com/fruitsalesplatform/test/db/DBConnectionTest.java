@@ -8,7 +8,6 @@ import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.fruitsalesplatform.entity.Accessory;
@@ -17,7 +16,6 @@ import com.fruitsalesplatform.entity.Contract;
 import com.fruitsalesplatform.entity.ContractVo;
 import com.fruitsalesplatform.entity.MiddleTab;
 import com.fruitsalesplatform.entity.Retailer;
-import com.fruitsalesplatform.test.entity.User;
 
 public class DBConnectionTest {
 	private String resource = "beans.xml";
@@ -35,7 +33,7 @@ public class DBConnectionTest {
 	// @Test
 	public void TestSelect() throws Exception {
 		sqlSession = getSqlSession();
-		User user = sqlSession.selectOne("test.findUserByName", "张三");
+		com.fruitsalesplatform.test.entity.User user = sqlSession.selectOne("test.findUserByName", "张三");
 		System.out.println("取出的用户信息：");
 		System.out.println("账号：" + user.getUsername());
 		System.out.println("密码：" + user.getPassword());
@@ -43,7 +41,7 @@ public class DBConnectionTest {
 		System.out.println("电话：" + user.getTelephone());
 	}
 
-	@Test
+	//@Test
 	public void TestUserFind() {
 		try {
 			sqlSession = getSqlSession();
@@ -120,7 +118,7 @@ public class DBConnectionTest {
 		sqlSession.delete("com.fruitsalesplatform.mapper.RetailerMapper.delete", ids);
 	}
 
-	@Test
+	//@Test
 	public void TestRetailerFind() {
 		try {
 			sqlSession = getSqlSession();

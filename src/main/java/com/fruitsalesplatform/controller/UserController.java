@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,37 @@ import com.qq.connect.oauth.Oauth;
 public class UserController extends BaseController {
 	@Autowired
 	private UserService userService;
+	
+	@RequestMapping(value = "/user/setting.action")
+	public String setting() {
+		return "/setting.jsp";
+	}
+	
+	@RequestMapping(value = "/user/updateOther.action",method = RequestMethod.POST)
+	public String updateUser(User user,Model model,HttpServletRequest request) {
+		String userId = ((User)request.getSession().getAttribute("user")).getUserId();
+		user.setUserId(userId);
+		userService.update(user);
+		model.addAttribute("updateMessage","修改成功！");
+		//重新获取User加入Session
+		User newUser = userService.get(userId);
+		request.getSession().setAttribute("user", newUser);
+		return "/setting.jsp";
+	}
+	
+	@RequestMapping(value = "/user/updatePassword.action",method = RequestMethod.POST)
+	public String updatePassword(String oldPassword,String newPassword,String confirmPassword,Model model,HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		User user = (User)session.getAttribute("user");
+		if(user.getPassword().equals(oldPassword)) {
+			user.setPassword(newPassword);
+			userService.update(user);
+			model.addAttribute("updateMessage","修改成功！");
+		}
+		else 
+			model.addAttribute("updateMessage","修改失败！原密码错误！");
+		return "/setting.jsp";
+	}
 	
 	@RequestMapping(value = "/user/bindUser.action",method = RequestMethod.POST)
 	public void bindUser(String userName,String password,HttpServletRequest request,HttpServletResponse response) {

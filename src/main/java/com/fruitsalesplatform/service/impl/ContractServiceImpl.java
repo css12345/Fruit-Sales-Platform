@@ -85,4 +85,16 @@ public class ContractServiceImpl implements ContractService {
 		}
 	}
 
+	@Override
+	public List<String> getRetailerAllContract(String retailerId) {
+		// TODO Auto-generated method stub
+		return contractDao.getRetailerAllContract(retailerId);
+	}
+
+	@Override
+	public List<String> getCommodityAllContract(String fruitId) {
+		// TODO Auto-generated method stub
+		return contractDao.getCommodityAllContract(fruitId);
+	}
+
 }

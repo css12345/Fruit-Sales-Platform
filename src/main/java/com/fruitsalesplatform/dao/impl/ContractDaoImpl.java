@@ -49,4 +49,16 @@ public class ContractDaoImpl extends BaseDaoImpl<Contract> implements ContractDa
 		return this.getSqlSession().selectOne(this.getNameSpace() + ".getMaxBarCode");
 	}
 
+	@Override
+	public List<String> getRetailerAllContract(String retailerId) {
+		// TODO Auto-generated method stub
+		return this.getSqlSession().selectList(this.getNameSpace() + ".getRetailerAllContract",retailerId);
+	}
+
+	@Override
+	public List<String> getCommodityAllContract(String fruitId) {
+		// TODO Auto-generated method stub
+		return this.getSqlSession().selectList(this.getNameSpace() + ".getCommodityAllContract",fruitId);
+	}
+
 }

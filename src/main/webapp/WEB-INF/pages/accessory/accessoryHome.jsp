@@ -57,6 +57,10 @@
 			alert("价格不能为空！");
 			return false;
 		}
+		if($("#addAccessoryPrice").val() <= 0) {
+			alert("价格必须大于0！");
+			return false;
+		}
 		return true;
 	}
 </script>

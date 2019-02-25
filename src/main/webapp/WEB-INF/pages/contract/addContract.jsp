@@ -10,8 +10,15 @@
 <script type="text/javascript" src="${pageContext.request.contextPath }/js/jquery-1.4.4.min.js"></script>
 <script type="text/javascript">
 	function checkAddContract() {
-		if($("#retailer_info").css("display") == "block" && $("#commodities_info").css("display") == "block")
-			return true;
+		if($("#retailer_info").css("display") == "block" && $("#commodities_info").css("display") == "block") {
+			var priceArrays = document.getElementsByName("priceArrays");
+			for(var i = 0;i < priceArrays.length;i++)
+				if(priceArrays[i].value <= 0) {
+					alert("斤数必须大于0！");
+					return false;
+				}
+			return true;	
+		}
 		else {
 			alert("信息不完整！");
 			return false;

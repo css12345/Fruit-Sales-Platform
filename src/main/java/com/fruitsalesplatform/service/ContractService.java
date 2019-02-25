@@ -18,4 +18,6 @@ public interface ContractService {
 	public void deleteMiddleTab(Serializable contractId);
 	public void deleteById(Serializable contractId);
 	public String getMaxBarCode();
+	public List<String> getRetailerAllContract(String string);
+	public List<String> getCommodityAllContract(String string);
 }

@@ -53,11 +53,25 @@
 	function deleteRetailer(id,name) {
 		var con = confirm("你确认删除用户" + name + "吗？");
 		if(con) {
-			$("#dRetailerId").val(id);
-			$("#dStartPage").val($("#startPage").val());
-			$("#dCurrentPage").val($("#currentPage").val());
-			$("#dPageSize").val($("#pageSize").val());
-			$("#deleteForm").submit();
+			var message = "{'retailerId':'" + id + "'}";
+			$.ajax({
+				type : 'post',
+				url : '/Fruit-Sales-Platform/contract/getRetailerAllContract.action',
+				contentType : 'application/json;charset=utf-8',
+				data : message,
+				success : function(data) {
+					if(data == "") {
+						$("#dRetailerId").val(id);
+						$("#dStartPage").val($("#startPage").val());
+						$("#dCurrentPage").val($("#currentPage").val());
+						$("#dPageSize").val($("#pageSize").val());
+						$("#deleteForm").submit();
+					}
+					else {
+						alert("用户" + name + "还有订单未删除，请先删除订单！");
+					}
+				}
+			});
 		}
 	}
 	

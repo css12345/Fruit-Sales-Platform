@@ -41,6 +41,16 @@ public class ContractController extends BaseController {
 	@Autowired
 	private AccessoryService accessoryService;
 	
+	@RequestMapping(value = "contract/getCommodityAllContract",method = RequestMethod.POST)
+	public @ResponseBody List<String> getCommodityAllContract(@RequestBody String fruitId) {
+		return contractService.getCommodityAllContract(JSONObject.parseObject(fruitId).getString("fruitId"));
+	}
+	
+	@RequestMapping(value = "contract/getRetailerAllContract",method = RequestMethod.POST)
+	public @ResponseBody List<String> getRetailerAllContract(@RequestBody String retailerId) {
+		return contractService.getRetailerAllContract(JSONObject.parseObject(retailerId).getString("retailerId"));
+	}
+	
 	@RequestMapping(value = "contract/edit.action",method = RequestMethod.POST)
 	public String editContract(Model model,Contract contract,String retailerId,String[] commoditiesIdArrays,String[] priceArrays) {
 		String contractId = contract.getContractId();

@@ -113,4 +113,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getMaxBarCode" resultType="string">
 		select MAX(barcode) from contract
 	</select>
+	
+	<select id="getRetailerAllContract" resultType="string">
+		select contractid from contract where retailerid = #{retailerId};
+	</select>
+	
+	<select id="getCommodityAllContract" resultType="string">
+		select contractid from middle_tab where fruitid = #{fruitId};
+	</select>
 </mapper>
